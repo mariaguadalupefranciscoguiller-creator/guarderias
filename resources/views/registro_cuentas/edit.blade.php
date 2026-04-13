@@ -1,0 +1,38 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header text-white fw-bold text-center" style="background-color: #198754;">
+                    <h4 class="mb-0">Editar Cuenta Bancaria</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="{{ route('registro_cuentas.update', $cuenta->id_registro_cuenta) }}" method="POST">
+                        @csrf
+                        @method('PUT') <div class="mb-3">
+                            <label class="form-label fw-bold">ID del Familiar</label>
+                            <input type="number" name="id_familiar" class="form-control" value="{{ $cuenta->id_familiar }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Número de Cuenta</label>
+                            <input type="text" name="cuenta" class="form-control" value="{{ $cuenta->cuenta }}" required>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-warning px-4 fw-bold" style="background-color: #ffc107; border: none;">
+                                Actualizar Cuenta
+                            </button>
+                            <a href="{{ route('registro_cuentas.index') }}" class="btn btn-secondary px-4">
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
