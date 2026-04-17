@@ -8,10 +8,23 @@ use Illuminate\Http\Request;
 class FamiliarController extends Controller
 {
     public function index()
-    {
-        $familiares = Familiar::all();
-        return view('familiares.index', compact('familiares'));
-    }
+{
+    $familiares = Familiar::join('ninios', 'familiares.id_ninio', '=', 'ninios.id_ninio')
+        ->join('personas as p_ninio', 'p_ninio.id_persona', '=', 'ninios.id_persona')
+        ->join('personas as p_familiar', 'p_familiar.id_persona', '=', 'familiares.id_persona')
+        ->join('parentezcos', 'familiares.id_parentezco', '=', 'parentezcos.id_parentezco')
+        ->select(
+            'familiares.id_familiar',
+            'familiares.DNI',
+            'familiares.direccion',
+            'p_familiar.nombre as nombre_familiar', 
+            'p_ninio.nombre as nombre_ninio',      
+            'parentezcos.nombre as parentezco_texto' // Usamos un alias claro
+        )
+        ->get();
+
+    return view('familiares.index', compact('familiares'));
+}
 
     public function create()
     {

@@ -3,19 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\BajaNinio;
+use App\Models\Ninio;
 use Illuminate\Http\Request;
 
 class BajaNinioController extends Controller
 {
     /**
-     * Muestra la lista de todas las bajas.
+     * Muestra la lista de todas las bajas con el nombre del niño.
      */
     public function index()
     {
-        // Consultamos todos los registros de la tabla baja_ninios
-        $bajas = BajaNinio::all(); 
-        
-        // Enviamos la variable 'bajas' a la vista index
+        // Hacemos join con ninios y personas para sacar el nombre
+        $bajas = BajaNinio::join('ninios', 'baja_ninios.id_ninio', '=', 'ninios.id_ninio')
+            ->join('personas', 'ninios.id_persona', '=', 'personas.id_persona')
+            ->select(
+                'baja_ninios.id_baja',
+                'baja_ninios.motivo',
+                'baja_ninios.fecha',
+                'personas.nombre as nombre_ninio' // Traemos el nombre real
+            )
+            ->get();
+            
         return view('baja_ninios.index', compact('bajas'));
     }
 
@@ -24,62 +32,55 @@ class BajaNinioController extends Controller
      */
     public function create()
     {
-        return view('baja_ninios.create');
+        // Traemos los niños con sus nombres para el select del formulario
+        $ninios = Ninio::join('personas', 'ninios.id_persona', '=', 'personas.id_persona')
+            ->select('ninios.id_ninio', 'personas.nombre')
+            ->get();
+
+        return view('baja_ninios.create', compact('ninios'));
     }
 
-    /**
-     * Guarda una nueva baja en la base de datos.
-     */
     public function store(Request $request)
     {
-        // Validamos y creamos el registro con los datos del formulario
+        $request->validate([
+            'id_ninio' => 'required',
+            'motivo' => 'required',
+            'fecha' => 'required'
+        ]);
+
         BajaNinio::create($request->all());
         
-        // Redirigimos al usuario a la lista principal
-        return redirect()->route('baja_ninios.index');
+        return redirect()->route('baja_ninios.index')
+            ->with('success', 'Baja registrada correctamente');
     }
 
-    /**
-     * Muestra el detalle de una baja específica (opcional).
-     */
-    public function show(BajaNinio $bajaNinio)
-    {
-        return "Detalle de la baja: " . $bajaNinio->id_baja;
-    }
-
-    /**
-     * Muestra el formulario para editar una baja existente.
-     */
     public function edit($id)
     {
-        // Buscamos el registro por su ID (id_baja)
         $baja = BajaNinio::findOrFail($id);
         
-        // Enviamos la variable 'baja' a la vista edit
-        return view('baja_ninios.edit', compact('baja'));
+        // También necesitamos la lista de niños aquí para el select
+        $ninios = Ninio::join('personas', 'ninios.id_persona', '=', 'personas.id_persona')
+            ->select('ninios.id_ninio', 'personas.nombre')
+            ->get();
+            
+        return view('baja_ninios.edit', compact('baja', 'ninios'));
     }
 
-    /**
-     * Actualiza el registro en la base de datos.
-     */
     public function update(Request $request, $id)
     {
-        // Buscamos el registro y lo actualizamos con los nuevos datos
         $baja = BajaNinio::findOrFail($id);
         $baja->update($request->all());
         
-        return redirect()->route('baja_ninios.index');
+        return redirect()->route('baja_ninios.index')
+            ->with('success', 'Baja actualizada correctamente');
     }
 
-    /**
-     * Elimina una baja de la base de datos.
-     */
     public function destroy($id)
     {
-        // Buscamos el registro por su ID y lo borramos
         $baja = BajaNinio::findOrFail($id);
         $baja->delete();
         
-        return redirect()->route('baja_ninios.index');
+        return redirect()->route('baja_ninios.index')
+            ->with('success', 'Baja eliminada correctamente');
     }
 }
