@@ -5,10 +5,11 @@ use Illuminate\Http\Request;
 class PersonaController extends Controller
 {
     public function index()
-    {
-        $personas = Persona::all();
-        return view('personas.index', compact('personas'));
-    }
+{
+    // Traemos todos los datos con los nombres reales de tu tabla
+    $personas = Persona::all(); 
+    return view('personas.index', compact('personas'));
+}
     public function create()
     {
         return view('personas.create');

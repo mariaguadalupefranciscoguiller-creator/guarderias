@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="container mt-4">
@@ -17,9 +17,16 @@
                         @method('PUT') {{-- Indica a Laravel que es una actualización --}}
                         
                         {{-- Campo ID del Niño --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID del Niño</label>
-                            <input type="number" name="id_ninio" class="form-control" value="{{ $baja->id_ninio }}" required>
+                        <div class="mb-3 text-start">
+                            <label for="id_ninio" class="form-label fw-bold">Seleccionar Niño</label>
+                            <select name="id_ninio" id="id_ninio" class="form-select" required>
+                                <option value="" disabled selected>Selecciona al niño que se dará de baja...</option>
+                                @foreach($ninios as $ninio)
+                                    <option value="{{ $ninio->id_ninio }}">
+                                        {{ $ninio->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         {{-- Campo Motivo --}}

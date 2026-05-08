@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="container mt-4">
@@ -15,13 +15,17 @@
                     <form action="{{ route('baja_ninios.store') }}" method="POST">
                         @csrf {{-- Token de seguridad obligatorio --}}
                         
-                        {{-- Campo para el ID del Niño --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID del Niño</label>
-                            <input type="number" name="id_ninio" class="form-control" placeholder="Ingrese el ID del alumno" required>
+                        <div class="mb-3 text-start">
+                            <label for="id_ninio" class="form-label fw-bold">Seleccionar Niño</label>
+                            <select name="id_ninio" id="id_ninio" class="form-select" required>
+                                <option value="" disabled selected>Selecciona al niño que se dará de baja...</option>
+                                @foreach($ninios as $ninio)
+                                    <option value="{{ $ninio->id_ninio }}">
+                                        {{ $ninio->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-
-                        {{-- Campo para el Motivo --}}
                         <div class="mb-3">
                             <label class="form-label fw-bold">Motivo de la Baja</label>
                             <textarea name="motivo" class="form-control" rows="3" placeholder="Explique la razón de la baja..." required></textarea>

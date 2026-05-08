@@ -1,65 +1,75 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
-<div class="container mt-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header text-white text-center fw-bold" style="background-color: #198754;">
-            <h3 class="mb-0">Listado de Niños</h3>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold text-dark m-0" style="letter-spacing: -0.5px;">Listado de Niños</h2>
+            <p class="text-secondary small m-0">Administración de expedientes y alumnos</p>
         </div>
+        <a href="{{ route('ninios.create') }}" class="btn btn-dark px-4 fw-bold" style="border-radius: 8px;">
+            + Registrar Nuevo Niño
+        </a>
+    </div>
 
-        <div class="card-body">
-            <div class="mb-3 text-start">
-                <a href="{{ route('ninios.create') }}" class="btn btn-success" style="background-color: #198754; border: none;">
-                    + Registrar Nuevo Niño
-                </a>
+    <div class="row g-4">
+        @forelse($ninios as $ninio)
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card border-0 shadow-sm h-100" style="border-radius: 12px; border: 1px solid #edf2f7 !important;">
+                    <div class="card-body p-4">
+                        
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1">{{ $ninio->nombre_ninio }}</h5>
+                                <span class="text-muted small" style="font-size: 0.75rem;">
+                                    Centro: {{ $ninio->nombre_centro }}
+                                </span>
+                            </div>
+                            <div class="text-secondary opacity-25">
+                                <i class="bi bi-person-badge fs-3"></i>
+                            </div>
+                        </div>
+
+                        <div class="row text-center py-3" style="background: #fafafa; border-radius: 8px; margin: 0 1px;">
+                            <div class="col-6 border-end">
+                                <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.6rem; letter-spacing: 0.5px;">Matrícula</small>
+                                <span class="fw-bold text-dark mb-0">{{ $ninio->matricula }}</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.6rem; letter-spacing: 0.5px;">Ingreso</small>
+                                <span class="fw-bold text-dark mb-0">
+                                    {{-- Aquí corregimos el nombre a ->fecha --}}
+                                    {{ date('d/m/Y', strtotime($ninio->fecha)) }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <a href="{{ route('ninios.edit', $ninio->id_ninio) }}" class="btn btn-link flex-grow-1 text-decoration-none text-secondary fw-bold border" style="font-size: 0.85rem; border-radius: 6px; background: white;">
+                                <i class="bi bi-pencil me-1"></i> Editar
+                            </a>
+                            <form action="{{ route('ninios.destroy', $ninio->id_ninio) }}" method="POST" class="flex-grow-1">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-link w-100 text-decoration-none text-danger fw-bold border" style="font-size: 0.85rem; border-radius: 6px; background: white;" onclick="return confirm('¿Eliminar registro?')">
+                                    <i class="bi bi-trash3 me-1"></i> Borrar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Matrícula</th>
-                            <th>ID Niño</th>
-                            <th>Fecha Ingreso</th>
-                            <th>ID Persona</th>
-                            <th>ID Centro</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($ninios as $ninio)
-                        <tr>
-                            <td class="fw-bold">{{ $ninio->id_ninio }}</td>
-                            <td>#{{ $ninio->matricula }}</td>
-                            <td class="text-dark fw-bold">{{ $ninio->nombre_ninio }}</td>
-                            <td>{{ $ninio->fecha }}</td>
-                            
-                            <td>{{ $ninio->nombre_ninio }}</td>
-                            
-                            <td>{{ $ninio->nombre_centro }}</td>
-                            
-                            <td>
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a href="{{ route('ninios.edit', $ninio->id_ninio) }}" class="btn btn-warning btn-sm fw-bold shadow-sm">
-                                       Editar
-                                    </a>
-
-                                    <form action="{{ route('ninios.destroy', $ninio->id_ninio) }}" method="POST" class="m-0">
-                                        @csrf 
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm fw-bold shadow-sm" onclick="return confirm('¿Borrar registro?')">
-                                            Borrar
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        @empty
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No hay registros.</p>
             </div>
-        </div>
+        @endforelse
     </div>
 </div>
+
+<style>
+    .card { transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06) !important; }
+    .btn-link:hover { background: #f8f9fa !important; border-color: #dee2e6 !important; color: #334155 !important; }
+</style>
 @endsection

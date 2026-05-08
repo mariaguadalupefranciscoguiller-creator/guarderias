@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="container mt-4">
@@ -11,9 +11,17 @@
                 <div class="card-body p-4">
                     <form action="{{ route('registro_cuentas.update', $cuenta->id_registro_cuenta) }}" method="POST">
                         @csrf
-                        @method('PUT') <div class="mb-3">
-                            <label class="form-label fw-bold">ID del Familiar</label>
-                            <input type="number" name="id_familiar" class="form-control" value="{{ $cuenta->id_familiar }}" required>
+                        @method('PUT') 
+                        <div class="mb-3">
+                            <label for="id_familiar" class="form-label fw-bold">Familiar Responsable</label>
+                            <select name="id_familiar" id="id_familiar" class="form-select" required>
+                                <option value="" disabled selected>Selecciona un familiar...</option>
+                                @foreach($familiares as $familiar)
+                                    <option value="{{ $familiar->id_familiar }}">
+                                        {{ $familiar->nombre }} (ID: {{ $familiar->id_familiar }})
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="mb-3">

@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+@extends('layouts.template')
 @section('content')
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -11,16 +10,25 @@
                 <div class="card-body p-4">
                     <form action="{{ route('menus.update', $menu->id_menu) }}" method="POST">
                         @csrf
-                        @method('PUT') <div class="mb-3">
+                        @method('PUT') 
+                        <div class="mb-3">
                             <label class="form-label fw-bold">ID del Plato</label>
-                            <input type="number" name="id_plato" class="form-control" value="{{ $menu->id_plato }}" required>
+                            <select name="id_plato" class="form-control" require>
+                                <option value="" disabled selected>selecciona un Plato</option>
+                                @foreach($platos as $plato)
+                                <option value="{{$plato->id_plato}}">{{$plato->nombre}}</option>
+                                @endforeach
+                            </select>
                         </div>
-
                         <div class="mb-3">
                             <label class="form-label fw-bold">ID del Ingrediente</label>
-                            <input type="number" name="id_ingrediente" class="form-control" value="{{ $menu->id_ingrediente }}" required>
+                            <select name="id_ingrediente" class="form-control" require>
+                                <option value="" disabled selected>selecciona un Ingrediente</option>
+                                @foreach($ingredientes as $ingrediente)
+                                <option value="{{$ingrediente->id_ingrediente}}">{{$ingrediente->nombre}}</option>
+                                @endforeach
+                            </select>
                         </div>
-
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-warning px-4 fw-bold" style="background-color: #ffc107; border: none;">
                                 Actualizar

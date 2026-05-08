@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="container mt-4">
@@ -11,14 +11,30 @@
                 <div class="card-body p-4">
                     <form action="{{ route('registro_comidas.update', $registro->id_registro_comida) }}" method="POST">
                         @csrf
-                        @method('PUT') <div class="mb-3">
-                            <label class="form-label fw-bold">ID del Niño</label>
-                            <input type="number" name="id_ninio" class="form-control" value="{{ $registro->id_ninio }}" required>
+                        @method('PUT') 
+                        <div class="mb-3 text-start">
+                            <label for="id_ninio" class="form-label fw-bold">Niño</label>
+                            <select name="id_ninio" id="id_ninio" class="form-select" required>
+                                <option value="" disabled selected>Selecciona al niño...</option>
+                                @foreach($ninios as $ninio)
+                                    <option value="{{ $ninio->id_ninio }}">
+                                        {{ $ninio->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID del Plato</label>
-                            <input type="number" name="id_plato" class="form-control" value="{{ $registro->id_plato }}" required>
+                        {{-- Selector para el Plato --}}
+                        <div class="mb-3 text-start">
+                            <label for="id_plato" class="form-label fw-bold">Plato del Menú</label>
+                            <select name="id_plato" id="id_plato" class="form-select" required>
+                                <option value="" disabled selected>Selecciona el plato...</option>
+                                @foreach($platos as $plato)
+                                    <option value="{{ $plato->id_plato }}">
+                                        {{ $plato->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="mb-3">

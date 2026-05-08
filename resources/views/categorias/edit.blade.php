@@ -1,4 +1,4 @@
-@extends('layouts.bodega')
+@extends('layouts.loto_template')
 
 @section('title', 'Editar Categoría')
 

@@ -1,90 +1,177 @@
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
-  <head>
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema de Gestión Administrativa</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="" />
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
-    <meta name="generator" content="Astro v5.13.2" />
-    <title>Guardería 2 - Panel de Control</title>
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/navbar-fixed/" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        :root {
+            --sidebar-bg: #0f172a; 
+            --sidebar-hover: #1e293b;
+            --accent-color: #10b981; 
+            --text-muted: #94a3b8;
+            --main-bg: #f1f5f9;
         }
-      }
-      .b-example-divider {
-        width: 100%;
-        height: 3rem;
-        background-color: #0000001a;
-        border: solid rgba(0, 0, 0, 0.15);
-        border-width: 1px 0;
-        box-shadow: inset 0 0.5em 1.5em #0000001a, inset 0 0.125em 0.5em #00000026;
-      }
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
-      .bi {
-        vertical-align: -0.125em;
-        fill: currentColor;
-      }
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-      .btn-bd-primary {
-        --bd-violet-bg: #712cf9;
-        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-        --bs-btn-font-weight: 600;
-        --bs-btn-color: var(--bs-white);
-        --bs-btn-bg: var(--bd-violet-bg);
-        --bs-btn-border-color: var(--bd-violet-bg);
-        --bs-btn-hover-color: var(--bs-white);
-        --bs-btn-hover-bg: #6528e0;
-        --bs-btn-hover-border-color: #6528e0;
-        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-        --bs-btn-active-color: var(--bs-btn-hover-color);
-        --bs-btn-active-bg: #5a23c8;
-        --bs-btn-active-border-color: #5a23c8;
-      }
-      .bd-mode-toggle {
-        z-index: 1500;
-      }
+
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: var(--main-bg); 
+            color: #1e293b;
+            margin: 0;
+        }
+
+        /* Sidebar con Scroll Independiente */
+        .sidebar { 
+            background-color: var(--sidebar-bg); 
+            width: 280px; 
+            position: fixed; 
+            top: 0;
+            left: 0;
+            bottom: 0;
+            color: white; 
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header { 
+            padding: 2rem 1.5rem; 
+            background: rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu { 
+            flex-grow: 1;
+            overflow-y: auto; /* Aquí se activa el "sube y baja" */
+            padding-bottom: 2rem;
+        }
+
+        /* Personalización de la barra de scroll */
+        .sidebar-menu::-webkit-scrollbar { width: 5px; }
+        .sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .sidebar-section { 
+            text-transform: uppercase; 
+            font-size: 0.7rem; 
+            font-weight: 700; 
+            color: var(--text-muted); 
+            padding: 1.5rem 1.5rem 0.5rem; 
+            letter-spacing: 1px;
+        }
+
+        .nav-link { 
+            color: var(--text-muted); 
+            margin: 0.2rem 1rem; 
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-link:hover { color: white; background-color: var(--sidebar-hover); }
+        .nav-link.active { 
+            color: white; 
+            background-color: var(--accent-color); 
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        /* Contenido Principal */
+        .main-wrapper { 
+            margin-left: 280px; 
+            padding: 2rem; 
+        }
+
+        header.top-nav {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { margin-left: -280px; }
+            .sidebar.show { margin-left: 0; }
+            .main-wrapper { margin-left: 0; }
+        }
     </style>
-  </head>
-  <body>
-    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-      <symbol id="check2" viewBox="0 0 16 16">
-        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
-      </symbol>
-      <symbol id="circle-half" viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"></path>
-      </symbol>
-      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
-        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"></path>
-        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.2
+</head>
+<body>
+
+    <aside class="sidebar shadow" id="sidebar">
+        <div class="sidebar-header">
+            <h4 class="m-0 text-white"><i class="bi bi-shield-lock-fill text-success me-2"></i>AdminPanel</h4>
+            <small class="text-muted">Control de Gestión</small>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="sidebar-section">Principal</div>
+            <a class="nav-link {{ request()->is('home') ? 'active' : '' }}" href="{{ route('home') }}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+
+            <div class="sidebar-section">Finanzas</div>
+            <a class="nav-link {{ request()->is('abonos*') ? 'active' : '' }}" href="{{ url('/abonos') }}"><i class="bi bi-cash-stack"></i> Abonos</a>
+            <a class="nav-link {{ request()->is('registro_cuentas*') ? 'active' : '' }}" href="{{ url('/registro_cuentas') }}"><i class="bi bi-receipt"></i> Cuentas</a>
+            <a class="nav-link {{ request()->is('centros*') ? 'active' : '' }}" href="{{ url('/centros') }}"><i class="bi bi-building-gear"></i> Centros</a>
+
+            <div class="sidebar-section">Gestión Alumnos</div>
+            <a class="nav-link {{ request()->is('ninios*') ? 'active' : '' }}" href="{{ url('/ninios') }}"><i class="bi bi-person-video3"></i> Alumnos</a>
+            <a class="nav-link {{ request()->is('familiares*') ? 'active' : '' }}" href="{{ url('/familiares') }}"><i class="bi bi-people"></i> Familiares</a>
+            <a class="nav-link {{ request()->is('personas*') ? 'active' : '' }}" href="{{ url('/personas') }}"><i class="bi bi-person-vcard"></i> Personas</a>
+            <a class="nav-link {{ request()->is('parentezcos*') ? 'active' : '' }}" href="{{ url('/parentezcos') }}"><i class="bi bi-diagram-3"></i> Parentescos</a>
+            <a class="nav-link {{ request()->is('alergias*') ? 'active' : '' }}" href="{{ url('/alergias') }}"><i class="bi bi-heart-pulse"></i> Alergias</a>
+            <a class="nav-link {{ request()->is('baja_ninios*') ? 'active' : '' }}" href="{{ url('/baja_ninios') }}"><i class="bi bi-person-x"></i> Bajas</a>
+
+            <div class="sidebar-section">Alimentación</div>
+            <a class="nav-link {{ request()->is('menus*') ? 'active' : '' }}" href="{{ url('/menus') }}"><i class="bi bi-calendar-week"></i> Menús</a>
+            <a class="nav-link {{ request()->is('platos*') ? 'active' : '' }}" href="{{ url('/platos') }}"><i class="bi bi-egg-fried"></i> Platos</a>
+            <a class="nav-link {{ request()->is('ingredientes*') ? 'active' : '' }}" href="{{ url('/ingredientes') }}"><i class="bi bi-basket"></i> Ingredientes</a>
+            <a class="nav-link {{ request()->is('registro_comidas*') ? 'active' : '' }}" href="{{ url('/registro_comidas') }}"><i class="bi bi-clipboard-check"></i> Registro Comidas</a>
+
+            <div class="sidebar-section">Sistema</div>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="nav-link w-100 border-0 bg-transparent text-danger text-start">
+                    <i class="bi bi-box-arrow-right"></i> Salir del Sistema
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-nav">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-dark d-lg-none" onclick="toggleSidebar()">☰</button>
+                <h5 class="m-0 fw-bold">Gestión de Guardería</h5>
+            </div>
+            <div class="fw-bold text-secondary">
+                <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name ?? 'Administrador' }}
+            </div>
+        </header>
+
+        <main>
+            @yield('content')
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

@@ -16,7 +16,7 @@ class NinioController extends Controller
             ->select(
                 'ninios.id_ninio', 
                 'ninios.matricula', 
-                'ninios.fecha', 
+                'ninios.fecha', // Este es el nombre correcto según tu código
                 'personas.nombre as nombre_ninio', 
                 'centros.nombre as nombre_centro'
             )

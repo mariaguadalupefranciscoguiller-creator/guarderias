@@ -1,4 +1,4 @@
-@extends('layouts.bodega')
+@extends('layouts.loto_template')
 
 @section('title', 'Agregar Nuevo Producto')
 
@@ -43,11 +43,17 @@
                                 <input type="date" name="fecha_entrada" id="fecha_entrada" class="form-control"
                                  value="{{ date('Y-m-d') }}" required>
                             </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="id_categoria" class="form-label fw-bold">Categoría (ID)</label>
-                                <input type="number" name="id_categoria" id="id_categoria" class="form-control" 
-                                placeholder="Ej: 1" required>
+                            <div class="col-md-6 mb-4">
+                            <div class="col-md-6 mb-4">
+                                <label for="id_categoria" class="form-label fw-bold">Categoría del Producto</label>
+                                <select name="id_categoria" id="id_categoria" class="form-select bg-light border-0" required style="border-radius: 12px; height: 50px;">
+                                    <option value="" selected disabled>Escoge una categoría...</option>
+                                    @foreach($categorias as $cat)
+                                        <option value="{{ $cat->id_categoria }}">
+                                            {{ $cat->nombre_categoria }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="container mt-4">
@@ -21,15 +21,28 @@
                             <input type="date" name="fecha" class="form-control" value="{{ $ninio->fecha }}" required>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID Persona (Referencia)</label>
-                            <input type="number" name="id_persona" class="form-control" value="{{ $ninio->id_persona }}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID Centro</label>
-                            <input type="number" name="id_centro" class="form-control" value="{{ $ninio->id_centro }}" required>
-                        </div>
+                        <div class="mb-3 text-start">
+                    <label for="id_persona" class="form-label fw-bold">Seleccionar Persona</label>
+                    <select name="id_persona" id="id_persona" class="form-select" required>
+                        <option value="" disabled selected>Escoge a la persona...</option>
+                        @foreach($personas as $persona)
+                            <option value="{{ $persona->id_persona }}">
+                                {{ $persona->nombre }} 
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-3 text-start">
+                    <label for="id_centro" class="form-label fw-bold">Asignar a Centro</label>
+                    <select name="id_centro" id="id_centro" class="form-select" required>
+                        <option value="" disabled selected>Selecciona el centro...</option>
+                        @foreach($centros as $centro)
+                            <option value="{{ $centro->id_centro }}">
+                                {{ $centro->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-warning px-4 fw-bold" style="background-color: #ffc107; border: none;">

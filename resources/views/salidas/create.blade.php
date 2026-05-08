@@ -1,4 +1,4 @@
-@extends('layouts.bodega')
+@extends('layouts.loto_template')
 
 @section('content')
 <div class="container">
@@ -23,13 +23,25 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold text-secondary">ID del Producto</label>
-                            <input type="number" name="id_producto" class="form-control" placeholder="Ej. 101" required>
+                            <label class="form-label fw-bold">Producto a Retirar</label>
+                            <select name="id_producto" class="form-select" required>
+                                <option value="" selected disabled>Selecciona el producto...</option>
+                                @foreach($productos as $prod)
+                                    <option value="{{ $prod->id_producto }}">{{ $prod->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-secondary">ID del Encargado</label>
-                            <input type="number" name="id_encargado" class="form-control" placeholder="Ej. 5" required>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-uppercase text-muted">Encargado que Autoriza</label>
+                            <select name="id_encargado" class="form-select bg-light border-0" required style="border-radius: 10px; height: 45px;">
+                                <option value="" selected disabled>Escoge a la persona...</option>
+                                @foreach($encargados as $enc)
+                                    <option value="{{ $enc->id_encargado }}">
+                                        {{ $enc->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">

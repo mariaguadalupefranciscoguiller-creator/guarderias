@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\Encargado;
+
 use Illuminate\Http\Request;
+use App\Models\Encargado;
 
 class EncargadoController extends Controller
 {
@@ -10,32 +11,34 @@ class EncargadoController extends Controller
         $encargados = Encargado::all();
         return view('encargados.index', compact('encargados'));
     }
+
     public function create()
     {
         return view('encargados.create');
     }
+
     public function store(Request $request)
     {
         Encargado::create($request->all());
         return redirect()->route('encargados.index');
     }
-    public function show(Encargado $encargado)
+    public function edit($id)
     {
-        return "hola desde show";
-    }
-    public function edit(Encargado $encargado)
-    {
+        $encargado = Encargado::findOrFail($id);
         return view('encargados.edit', compact('encargado'));
     }
-    public function update(Request $request, Encargado $encargado)
+
+    public function update(Request $request, $id)
     {
-       $encargado->update($request->all());
-       return redirect()->route('encargados.index');
+        $encargado = Encargado::findOrFail($id);
+        $encargado->update($request->all());
+        return redirect()->route('encargados.index');
     }
-    public function destroy(Encargado $encargado)
+
+    public function destroy($id)
     {
+        $encargado = Encargado::findOrFail($id);
         $encargado->delete();
         return redirect()->route('encargados.index');
     }
-    
 }

@@ -1,10 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-11">
         <div class="card shadow-lg border-0">
-            {{-- Encabezado verde igual al de Abonos --}}
             <div class="card-header bg-success text-white text-center">
                 <h4 class="mb-0">Lista de Familiares</h4>
             </div>
@@ -20,7 +19,7 @@
                     <table class="table table-hover table-striped align-middle text-center">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>DNI</th>
                                 <th>Dirección</th>
                                 <th>Familiar</th>
@@ -31,35 +30,33 @@
                         </thead>
                         <tbody>
                         @foreach($familiares as $familiar)
-    <tr>
-        <td class="fw-bold">#{{ $familiar->id_familiar }}</td>
-        <td>{{ $familiar->DNI }}</td>
-        <td class="text-start">{{ $familiar->direccion }}</td>
-        
-        {{-- Quitamos los cuadritos (badge) para que sea texto limpio --}}
-        <td>{{ $familiar->nombre_familiar }}</td>
-        
-        {{-- Ahora usamos el alias que definimos en el controlador --}}
-        <td>{{ $familiar->parentezco_texto }}</td>
-        
-        <td class="text-primary fw-bold">{{ $familiar->nombre_ninio }}</td>
-
-        <td>
-            <div class="d-flex justify-content-center gap-2">
-                <a href="{{ route('familiares.edit', $familiar->id_familiar) }}" 
-                   class="btn btn-sm btn-warning">Editar</a>
-                
-                <form action="{{ route('familiares.destroy', $familiar->id_familiar) }}" method="POST" class="m-0">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">
-                        Eliminar
-                    </button>
-                </form>
-            </div>
-        </td>
-    </tr>
-@endforeach
+                            <tr>
+                                <td>{{ $familiar->id_familiar }}</td>
+                                
+                                {{-- Aquí usamos el DNI que viene de la tabla personas --}}
+                                <td>{{ $familiar->DNI }}</td>
+                                
+                                <td>{{ $familiar->direccion }}</td>
+                                <td>{{ $familiar->familiar_nom ?? 'Sin Nombre' }}</td>
+                                <td>{{ $familiar->parentesco_nom ?? 'No asignado' }}</td>
+                                <td class="text-primary fw-bold">{{ $familiar->ninio_nom ?? 'Error' }}</td>
+                                
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('familiares.edit', $familiar->id_familiar) }}" 
+                                           class="btn btn-sm btn-warning">Editar</a>
+                                        
+                                        <form action="{{ route('familiares.destroy', $familiar->id_familiar) }}" method="POST" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -73,4 +70,9 @@
         </div>
     </div>
 </div>
+<style>
+    .card { transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06) !important; }
+    .btn-link:hover { background: #f8f9fa !important; border-color: #dee2e6 !important; color: #334155 !important; }
+</style>
 @endsection

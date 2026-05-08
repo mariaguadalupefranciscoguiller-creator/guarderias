@@ -12,10 +12,8 @@ class CentroController extends Controller
      */
     public function index()
     {
-        //
-        $centros = Centro::all();
-
-       // dd($personas);
+        // Traemos todos los centros de la base de datos
+        $centros = Centro::all(); 
         return view('centros.index', compact('centros'));
     }
 

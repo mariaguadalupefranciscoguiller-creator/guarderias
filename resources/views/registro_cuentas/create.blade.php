@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 @section('content')
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -11,8 +11,15 @@
                     <form action="{{ route('registro_cuentas.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label fw-bold">ID del Familiar</label>
-                            <input type="number" name="id_familiar" class="form-control" required>
+                            <label for="id_familiar" class="form-label fw-bold">Familiar Responsable</label>
+                            <select name="id_familiar" id="id_familiar" class="form-select" required>
+                                <option value="" disabled selected>Selecciona un familiar...</option>
+                                @foreach($familiares as $familiar)
+                                    <option value="{{ $familiar->id_familiar }}">
+                                        {{ $familiar->nombre }} (ID: {{ $familiar->id_familiar }})
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">Número de Cuenta</label>

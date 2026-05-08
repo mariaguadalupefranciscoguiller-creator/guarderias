@@ -1,4 +1,4 @@
-@extends('layouts.bodega')
+@extends('layouts.loto_template')
 
 @section('content')
 <div class="container mt-5">

@@ -3,23 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Familiar;
+use App\Models\Persona;
+use App\Models\Parentezco;
+use App\Models\Ninio;
 use Illuminate\Http\Request;
 
 class FamiliarController extends Controller
 {
     public function index()
 {
-    $familiares = Familiar::join('ninios', 'familiares.id_ninio', '=', 'ninios.id_ninio')
-        ->join('personas as p_ninio', 'p_ninio.id_persona', '=', 'ninios.id_persona')
-        ->join('personas as p_familiar', 'p_familiar.id_persona', '=', 'familiares.id_persona')
-        ->join('parentezcos', 'familiares.id_parentezco', '=', 'parentezcos.id_parentezco')
+    $familiares = Familiar::leftJoin('ninios', 'familiares.id_ninio', '=', 'ninios.id_ninio')
+        ->leftJoin('personas as p_ninio', 'ninios.id_persona', '=', 'p_ninio.id_persona')
+        ->leftJoin('personas as p_familiar', 'familiares.id_persona', '=', 'p_familiar.id_persona')
+        ->leftJoin('parentezcos', 'familiares.id_parentezco', '=', 'parentezcos.id_parentezco')
         ->select(
-            'familiares.id_familiar',
-            'familiares.DNI',
-            'familiares.direccion',
-            'p_familiar.nombre as nombre_familiar', 
-            'p_ninio.nombre as nombre_ninio',      
-            'parentezcos.nombre as parentezco_texto' // Usamos un alias claro
+            'familiares.*', // Esto debería traer el DNI si está en la tabla familiares
+            'p_ninio.nombre as ninio_nom',
+            'p_familiar.nombre as familiar_nom',
+            'parentezcos.nombre as parentesco_nom'
         )
         ->get();
 
@@ -27,9 +28,14 @@ class FamiliarController extends Controller
 }
 
     public function create()
-    {
-        return view('familiares.create');
-    }
+{
+    $personas = Persona::all(); 
+    $parentescos = Parentezco::all();
+    $ninios = Ninio::join('personas', 'ninios.id_persona', '=', 'personas.id_persona')
+        ->select('ninios.id_ninio', 'personas.nombre')
+        ->get();
+    return view('familiares.create', compact('personas', 'parentescos', 'ninios'));
+}
 
     public function store(Request $request)
     {
@@ -45,6 +51,7 @@ class FamiliarController extends Controller
     // Cambiamos (Familiar $familiar) por ($id) para evitar errores de búsqueda
     public function edit($id)
     {
+        $parentezcos = Parentezco::all();
         $familiar = Familiar::findOrFail($id);
         return view('familiares.edit', compact('familiar'));
     }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 @section('content')
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -11,28 +11,49 @@
                     <form action="{{ route('familiares.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label class="form-label fw-bold">ID Persona</label>
-                            <input type="number" name="id_persona" class="form-control" required>
+                        {{-- Selector para ID Persona --}}
+                        <div class="mb-3 text-start">
+                            <label for="id_persona" class="form-label fw-bold">Seleccionar Persona (Familiar)</label>
+                            <select name="id_persona" id="id_persona" class="form-select" required>
+                                <option value="" disabled selected>Seleccione la persona...</option>
+                                @foreach($personas as $persona)
+                                    <option value="{{ $persona->id_persona }}">{{ $persona->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">DNI</label>
-                            <input type="text" name="DNI" class="form-control" required>
+
+                        {{-- Campo DNI (Se mantiene texto) --}}
+                        <div class="mb-3 text-start">
+                            <label for="dni" class="form-label fw-bold">DNI</label>
+                            <input type="text" name="dni" class="form-control" placeholder="Ej: 12345678" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Dirección</label>
-                            <input type="text" name="direccion" class="form-control" required>
+
+                        {{-- Campo Dirección (Se mantiene texto) --}}
+                        <div class="mb-3 text-start">
+                            <label for="direccion" class="form-label fw-bold">Dirección</label>
+                            <input type="text" name="direccion" class="form-control" placeholder="Calle Ejemplo #123" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID Parentezco</label>
-                            <input type="number" name="id_parentezco" class="form-control" required>
+
+                        {{-- Selector para ID Parentesco --}}
+                        <div class="mb-3 text-start">
+                            <label for="id_parentezco" class="form-label fw-bold">Parentesco</label>
+                            <select name="id_parentezco" id="id_parentezco" class="form-select" required>
+                                <option value="" disabled selected>Seleccione el parentesco...</option>
+                                @foreach($parentescos as $parentesco)
+                                    <option value="{{ $parentesco->id_parentezco }}">{{ $parentesco->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID Niño</label>
-                            <input type="number" name="id_ninio" class="form-control" required>
-                        </div>
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-success px-4" style="background-color: #198754;">Guardar</button>
-                            <a href="{{ route('familiares.index') }}" class="btn btn-secondary px-4">Cancelar</a>
+
+                        {{-- Selector para ID Niño --}}
+                        <div class="mb-3 text-start">
+                            <label for="id_ninio" class="form-label fw-bold">Niño Vinculado</label>
+                            <select name="id_ninio" id="id_ninio" class="form-select" required>
+                                <option value="" disabled selected>¿A qué niño representa?</option>
+                                @foreach($ninios as $ninio)
+                                    <option value="{{ $ninio->id_ninio }}">{{ $ninio->nombre }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </form>
                 </div>

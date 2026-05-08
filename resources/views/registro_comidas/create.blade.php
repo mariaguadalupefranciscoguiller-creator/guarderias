@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 @section('content')
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -10,20 +10,40 @@
                 <div class="card-body p-4">
                     <form action="{{ route('registro_comidas.store') }}" method="POST">
                         @csrf
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID Niño</label>
-                            <input type="number" name="id_ninio" class="form-control" required>
+                        {{-- Selector para el Niño --}}
+                        <div class="mb-3 text-start">
+                            <label for="id_ninio" class="form-label fw-bold">Niño</label>
+                            <select name="id_ninio" id="id_ninio" class="form-select" required>
+                                <option value="" disabled selected>Selecciona al niño...</option>
+                                @foreach($ninios as $ninio)
+                                    <option value="{{ $ninio->id_ninio }}">
+                                        {{ $ninio->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">ID Plato</label>
-                            <input type="number" name="id_plato" class="form-control" required>
+
+                        {{-- Selector para el Plato --}}
+                        <div class="mb-3 text-start">
+                            <label for="id_plato" class="form-label fw-bold">Plato del Menú</label>
+                            <select name="id_plato" id="id_plato" class="form-select" required>
+                                <option value="" disabled selected>Selecciona el plato...</option>
+                                @foreach($platos as $plato)
+                                    <option value="{{ $plato->id_plato }}">
+                                        {{ $plato->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Fecha</label>
+
+                        {{-- Los campos de Fecha y Cantidad se quedan igual --}}
+                        <div class="mb-3 text-start">
+                            <label for="fecha" class="form-label fw-bold">Fecha</label>
                             <input type="date" name="fecha" class="form-control" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Cantidad</label>
+
+                        <div class="mb-3 text-start">
+                            <label for="cantidad" class="form-label fw-bold">Cantidad</label>
                             <input type="number" name="cantidad" class="form-control" placeholder="Ej: 1" required>
                         </div>
                         <div class="text-center mt-4">

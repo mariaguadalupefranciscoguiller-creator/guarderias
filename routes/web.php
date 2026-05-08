@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-//use App\Http\Controllers\ProductoController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NinioController;
 use App\Http\Controllers\AlergiaController;
 use App\Http\Controllers\PersonaController;
@@ -22,45 +22,47 @@ use App\Http\Controllers\EncargadoController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\RegistroComidaController;
 use App\Http\Controllers\RegistroCuentaController;
-// 1. Al entrar al proyecto sin loguearse, mandamos al login
-Route::get('/dashboard', function () {
-    return view('welcome');
-})->name('dashboard');
+
+// --- A partir de aquí siguen tus rutas ---
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('/', function () { 
     return redirect('/login'); 
 });
 
-// 2. Mostrar el formulario de Login
 Route::get('/login', function () { 
     return view('login'); 
 })->name('login');
 
-// 3. Procesar el Login y mandar al menú de botones (welcome)
 Route::post('/login', function () { 
     return redirect('/menu-principal'); 
 });
+Route::post('/logout', function () {
+    return redirect('/login');
+})->name('logout');
 
-// 4. Esta es la página de los botones (welcome.blade.php)
-// 3. Procesar el Login y mandar al menú de botones (welcome)
 Route::post('/login', function () { 
-    return redirect('/menu-principal'); 
+    return redirect('/menu'); // <--- Esto te mandará a Guardería al entrar
 });
 
-// 4. Esta es la página de los botones (welcome.blade.php)
-// Ruta #4: El menú de botones (ASEGÚRATE QUE TENGA LAS DOS //)
+Route::get('/', function () {
+    return redirect('/home');
+});
+
+Route::get('/menu', function () {
+    return view('menu_guarderia'); // Asegúrate de que el archivo se llame así
+})->name('menu.guarderia');
+
 Route::get('/menu-principal', function () { 
-    return view('menu_bodega'); // El nombre del archivo que acabas de crear
+    return view('menu_bodega'); 
 })->name('menu.principal');
 
-// 5. El home CORREGIDO: Ahora ya no usa el HomeController para evitar el error "View [home] not found"
-// Ahora, si algo intenta entrar a /home, lo manda directo al menú principal.
-Route::get('/home', function () { 
-    return view('welcome'); 
-})->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', function () { return view('welcome'); })->name('dashboard');
 
-// 6. Todos tus recursos (se quedan igual, no se tocan)
-//Route::resource('productos', ProductoController::class);
+// --- RUTAS DE RECURSOS (CRUDs) ---
+
 Route::resource('ninios', NinioController::class);
 Route::resource('abonos', AbonoController::class);
 Route::resource('baja_ninios', BajaNinioController::class);
@@ -80,3 +82,6 @@ Route::resource('entradas', EntradaController::class);
 Route::resource('salidas', SalidaController::class);
 Route::resource('empleados', EmpleadoController::class);
 Route::resource('encargados', EncargadoController::class);
+Route::resource('productos', ProductodosController::class)->names('productosdos');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
